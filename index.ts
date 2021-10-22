@@ -15,8 +15,8 @@ async function main() {
     // store the hash on the tangle
     const now = new Date();
 
-    var date = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
-    var time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+    const date = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+    const time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
 
     const message = {
         "filename": "sample.txt",
