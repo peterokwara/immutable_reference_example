@@ -1,25 +1,32 @@
-// import { MamHelper } from "./utils/mamHelper";
 import { FileHelper } from "./utils/fileHelper";
 import { IpfsHelper } from "./utils/ipfsHelper";
+import { MamHelper } from "./utils/mamHelper";
 
-// async function transaction() {
-//     // send the transaction to the mam channel
-//     const mamHelper = new MamHelper();
-//     const transaction = {
-//         "message": "discothequee"
-//     };
-//     // send the transaction and event
-//     await mamHelper.create(transaction);
-// }
+async function main() {
 
-// transaction();
-
-async function ipfsTest() {
-
-    const ipfsHelper = new IpfsHelper();
+    // fetch the sample file we have
     const fileHelper = new FileHelper();
     const file = fileHelper.fetchFile();
-    await ipfsHelper.addFile(file);
+
+    // store the file on ipfs and get the location of the file
+    const ipfsHelper = new IpfsHelper();
+    const hash = await ipfsHelper.addFile(file);
+
+    // store the hash on the tangle
+    const now = new Date();
+
+    var date = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate();
+    var time = now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+
+    const message = {
+        "filename": "sample.txt",
+        "date": `Date: ${date}, time: ${time} `,
+        "hash": hash
+    };
+
+    const mamHelper = new MamHelper();
+    await mamHelper.create(message);
+
 }
 
-ipfsTest()
+main()
