@@ -1,4 +1,5 @@
 // import { MamHelper } from "./utils/mamHelper";
+import { FileHelper } from "./utils/fileHelper";
 import { IpfsHelper } from "./utils/ipfsHelper";
 
 // async function transaction() {
@@ -16,7 +17,9 @@ import { IpfsHelper } from "./utils/ipfsHelper";
 async function ipfsTest() {
 
     const ipfsHelper = new IpfsHelper();
-    await ipfsHelper.addFile()
+    const fileHelper = new FileHelper();
+    const file = fileHelper.fetchFile();
+    await ipfsHelper.addFile(file);
 }
 
 ipfsTest()
