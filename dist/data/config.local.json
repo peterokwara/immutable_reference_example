@@ -1,0 +1,6 @@
+{
+    "node": {
+        "provider": "https://chrysalis-nodes.iota.org",
+        "mode": "public"
+    }
+}
