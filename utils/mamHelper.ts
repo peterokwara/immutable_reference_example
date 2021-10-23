@@ -98,6 +98,10 @@ export class MamHelper {
             const { messageId } = await mamAttach(this._nodeConfig.provider, mamMessage);
             console.log(`Message Id`, messageId);
             console.log(`You can view the mam channel here https://explorer.iota.org/mainnet/streams/0/${mamMessage.root}/public/`);
+
+            // store the state
+            await this.storeChannelState(channelState);
+
         } catch (error) {
             throw new Error(`Could not store the message on the mam channel ${error} `);
         }
