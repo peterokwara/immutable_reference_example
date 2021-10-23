@@ -1,3 +1,6 @@
 node_modules
 data/config.local.json
 dist
+channelState.json
+dist/utils/mamHelper.js
+dist/data/config.local.json
