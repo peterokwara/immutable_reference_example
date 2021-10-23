@@ -16,7 +16,7 @@ npm install
 ```
 To install all the dependencies
 
-## Usage
+## Run
 
 The project needs to be built before running it. To do this run:
 
@@ -29,6 +29,10 @@ Once the build process is complete, a separate folder called `dist` is created. 
 ```bash
 npm run start
 ```
+
+## Usage
+
+Try and change the contents of the `sample/sample.txt` file and run `npm run start`. From the console logs, try and get the file content from IPFS and also the hash from IOTA Tangle. As you run
 
 ## Contributing
 
