@@ -9,9 +9,8 @@
     "build-compile": "tsc",
     "build-watch": "tsc --watch",
     "build-lint": "tslint -p ./tsconfig.json -c ./tslint.json -t verbose",
-    "build-copy-config": "copyfiles -u 2 ./src/data/**/*.json ./dist/data/",
-    "build-copy-docs": "copyfiles -u 1 ./src/docs/**/* ./dist",
-    "build": "npm-run-all build-clean build-compile build-lint build-copy-docs build-copy-config",
+    "build-copy-config": "copyfiles -up 2 ./data/**/*.json ./dist/",
+    "build": "npm-run-all build-clean build-compile build-lint build-copy-config",
     "serve-mon": "nodemon ./dist/index",
     "start-dev": "run-p serve-mon build-watch"
   },

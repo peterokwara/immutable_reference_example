@@ -1,10 +1,9 @@
 import { IMamChannelState } from "@iota/mam.js";
+import { createChannel, createMessage, mamAttach, TrytesHelper } from "@iota/mam.js";
+import crypto from "crypto";
+import fs from "fs";
+import config from "../data/config.local.json";
 import { INodeConfiguration } from "../models/configuration/INodeConfiguration";
-const config = require("../data/config.local.json");
-const { createChannel, createMessage, mamAttach, TrytesHelper } = require('@iota/mam.js');
-const fs = require('fs');
-const crypto = require('crypto');
-
 
 /**
  * Class to handle the storage of information on the mam channel
@@ -20,9 +19,9 @@ export class MamHelper {
         this._nodeConfig = config.node;
     }
 
-
     /**
      * Function to create a new channel if one does not exist
+     * @returns The mam channel state
      */
     public async createNewChannel(): Promise<IMamChannelState> {
         let channelState: IMamChannelState;
@@ -39,27 +38,36 @@ export class MamHelper {
         if (!channelState) {
 
             // create a new mam channel
-            channelState = createChannel(this.generateSeed(81), 2, this._nodeConfig.mode);
+            channelState = createChannel(this.generateSeed(81), 2, "public");
         }
 
         return channelState;
 
     }
 
-    public async storeChannelState(channelState) {
+    /**
+     * Function to store the current channel state
+     * @param channelState the channel state
+     */
+    public async storeChannelState(channelState: IMamChannelState): Promise<void> {
         // Store the channel state.
         try {
-            fs.writeFileSync('./channelState.json', JSON.stringify(channelState, undefined, "\t"));
+            fs.writeFileSync("./channelState.json", JSON.stringify(channelState, undefined, "\t"));
         } catch (e) {
-            console.error(e)
+            console.error(e);
         }
     }
 
-    public generateSeed(length) {
-        const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
-        let seed = '';
+    /**
+     * Function to generate a seed
+     * @param length the length of the seed
+     * @returns the seed itself
+     */
+    public generateSeed(length: number): string {
+        const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ9";
+        let seed = "";
         while (seed.length < length) {
-            const byte = crypto.randomBytes(1)
+            const byte = crypto.randomBytes(1);
             if (byte[0] < 243) {
                 seed += charset.charAt(byte[0] % 27);
             }
@@ -86,13 +94,10 @@ export class MamHelper {
             console.log("NextRoot:", channelState.nextRoot);
 
             // Attach the message.
-            console.log('Attaching to tangle, please wait...')
-            const { messageId } = await mamAttach(this._nodeConfig.provider, mamMessage, "MY9MAM");
+            console.log("Attaching to tangle, please wait...");
+            const { messageId } = await mamAttach(this._nodeConfig.provider, mamMessage);
             console.log(`Message Id`, messageId);
-            console.log(`You can view the mam channel here https://explorer.iota.org/mainnet/streams/0/${mamMessage.root}/${this._nodeConfig.mode}/`);
-
-
-
+            console.log(`You can view the mam channel here https://explorer.iota.org/mainnet/streams/0/${mamMessage.root}/public/`);
         } catch (error) {
             throw new Error(`Could not store the message on the mam channel ${error} `);
         }
